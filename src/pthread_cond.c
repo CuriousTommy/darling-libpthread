@@ -63,6 +63,16 @@ __private_extern__ int _pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t 
 
 extern int __gettimeofday(struct timeval *, struct timezone *);
 
+bool OSAtomicCompareAndSwap32Barrier(int32_t o, int32_t n, volatile int32_t *p) {
+	return true;
+}
+
+bool OSAtomicCompareAndSwap64Barrier(int64_t o, int64_t n, volatile int64_t *p) {
+	return true;
+}
+
+void OSMemoryBarrier(void) {}
+
 #ifndef BUILDING_VARIANT
 static void _pthread_cond_cleanup(void *arg);
 static void _pthread_cond_updateval(_pthread_cond * cond, int error, uint32_t updateval);

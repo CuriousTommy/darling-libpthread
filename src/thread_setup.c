@@ -75,6 +75,10 @@ _pthread_setup(pthread_t thread,
 	arm_thread_state_t state = {0};
 	thread_state_flavor_t flavor = ARM_THREAD_STATE;
 	mach_msg_type_number_t count = ARM_THREAD_STATE_COUNT;
+#elif defined(__arm64__)
+	arm_thread_state64_t state = {0};
+	thread_state_flavor_t flavor = ARM_THREAD_STATE64;
+	mach_msg_type_number_t count = ARM_THREAD_STATE64_COUNT;
 #else
 #error _pthread_setup not defined for this architecture
 #endif
@@ -121,6 +125,8 @@ _pthread_setup(pthread_t thread,
 
 	state.__sp = (uintptr_t)vsp - C_ARGSAVE_LEN - C_RED_ZONE;
 	state.__r[0] = (uintptr_t)thread;
+#elif defined(__arm64__)
+	#warning "_pthread_setup ARM64 not implemented" 
 #else
 #error _pthread_setup not defined for this architecture
 #endif
