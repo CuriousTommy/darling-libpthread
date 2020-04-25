@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 2.4.0)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdinc -std=gnu11")
 
+include_directories(${CMAKE_SOURCE_DIR}/platform-include)
 include_directories(${CMAKE_SOURCE_DIR}/src/libc/darwin)
 include_directories(${CMAKE_SOURCE_DIR}/src/libc/derived)
 include_directories(${CMAKE_SOURCE_DIR}/src/kernel/libsyscall/wrappers)
@@ -11,24 +12,23 @@ include_directories(${CMAKE_SOURCE_DIR}/src/kernel/libsyscall/wrappers/spawn)
 include_directories(${CMAKE_SOURCE_DIR}/src/kernel/libsyscall)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../private)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/resolver)
 
 add_definitions(-DPRIVATE)
 
 set(pthread_common_sources
-	pthread_atfork.c
+	#mk_pthread_impl.c
 	pthread.c
+	pthread_asm.S
+	pthread_atfork.c
+	pthread_cancelable.c
 	pthread_cond.c
 	pthread_cwd.c
+	pthread_dependency.c
 	pthread_mutex.c
-	pthread_mutex_up.c
 	pthread_rwlock.c
-	pthread_support.c
 	pthread_tsd.c
-	pthread_cancelable.c
 	qos.c
-	resolver.c
-	thread_setup.c
-	pthread_asm.S
 )
 set(pthread_sources
 	${pthread_common_sources}
@@ -37,6 +37,8 @@ set(pthread_sources
 	variants/pthread_cond_legacy.c
 	variants/pthread_mutex_legacy.c
 	variants/pthread_rwlock_legacy.c
+	
+	resolver/resolver.c
 )
 
 SET_SOURCE_FILES_PROPERTIES(pthread_mutex.c PROPERTIES COMPILE_FLAGS "${CMAKE_C_FLAGS}")
